@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.oas.iatradingbot.config;
+package src.main.java.com.oas.iatradingbot.config;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -22,8 +22,11 @@ public class InitAndConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins("*").allowedMethods("OPTIONS","GET", "POST", "PUT", "PATCH", "DELETE")
-                        .allowedHeaders("Content-Type");
+        registry
+	        .addMapping("/**")
+	        .allowedOrigins("*")
+	        .allowedMethods("OPTIONS","GET", "POST", "PUT", "PATCH", "DELETE")
+	        .allowedHeaders("Content-Type");
     }
     
     @Bean

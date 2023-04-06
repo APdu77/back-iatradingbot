@@ -1,4 +1,4 @@
-package com.oas.iatradingbot;
+package src.main.java.com.oas.iatradingbot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

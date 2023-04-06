@@ -2,15 +2,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.oas.iatradingbot.model;
+package src.main.java.com.oas.iatradingbot.model;
+
+import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.annotation.Generated;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.time.Instant;
 
 
 /**
@@ -18,18 +20,24 @@ import java.time.Instant;
  * @author oandrade
  */
 @Entity
-public class BinanceAccount {
-    @Id
+public class BinanceAccount{
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+	// rdu on s'assure que chaque valeur de la colonne sera unique
+	@Column(unique = true)
     private String binanceApiKey;
     @JsonIgnore
+    @Column(unique = true)
     private String binanceApiSecret;
+    @Column(unique = true)
     private String binanceAccountId;
     @JsonIgnore
     private Boolean suspended = Boolean.TRUE; // suspendu par défault tant que l'on n'a pas vérifier les possibilités de l'api et que c'est bien un filleul    
     @JsonIgnore
-    private String suspensionReason = "Initial state"; 
+    private String suspensionReason = "Initial state";
+    @Column(unique = true)
     private String email;
     @JsonIgnore
     private String password;
@@ -96,7 +104,7 @@ public class BinanceAccount {
     public void setSuspensionReason(String suspensionReason) {
         this.suspensionReason = suspensionReason;
     }
-
+	
     public String getEmail() {
         return email;
     }
@@ -105,14 +113,14 @@ public class BinanceAccount {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }
 
+    public String getPassword() {
+        return password;
+    }
+    
     public String getToken() {
         return token;
     }
@@ -136,7 +144,7 @@ public class BinanceAccount {
     public void setTokenInstant(Instant tokenInstant) {
         this.tokenInstant = tokenInstant;
     }
-    
-    
+
+   
 
 }
