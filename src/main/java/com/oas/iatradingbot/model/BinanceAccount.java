@@ -28,12 +28,13 @@ public class BinanceAccount{
 	// rdu on s'assure que chaque valeur de la colonne sera unique
 	@Column(unique = true)
     private String binanceApiKey;
-    @JsonIgnore
+    @JsonIgnore//a parametrer en reception only
     @Column(unique = true)
     private String binanceApiSecret;
     @Column(unique = true)
     private String binanceAccountId;
-    @JsonIgnore
+    //@JsonIgnore
+    //rdu info necessaire pour indiquer a l'utilisateur que le compte est actif/inactif
     private Boolean suspended = Boolean.TRUE; // suspendu par défault tant que l'on n'a pas vérifier les possibilités de l'api et que c'est bien un filleul    
     @JsonIgnore
     private String suspensionReason = "Initial state";

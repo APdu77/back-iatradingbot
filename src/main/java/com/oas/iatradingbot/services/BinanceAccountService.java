@@ -9,12 +9,14 @@ import java.security.MessageDigest;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import src.main.java.com.oas.iatradingbot.model.BinanceAccount;
 import src.main.java.com.oas.iatradingbot.repositories.BinanceAccountRepository;
@@ -34,37 +36,34 @@ public class BinanceAccountService {
     MessageDigest messageDigest;
     
     @Transactional
-    public void createBinanceAccount(BinanceAccount binanceAccount){
-        String hexHash = StringTool.bytesToHex(messageDigest.digest(binanceAccount.getPassword().getBytes(StandardCharsets.UTF_8)));
-        binanceAccount.setPassword(hexHash);
-        binanceAccountRepository.save(binanceAccount);
+    public BinanceAccount createBinanceAccount(BinanceAccount binanceAccountToCreate){
+        String hexHash = StringTool.bytesToHex(messageDigest.digest(binanceAccountToCreate.getPassword().getBytes(StandardCharsets.UTF_8)));
+        binanceAccountToCreate.setPassword(hexHash);
+        binanceAccountToCreate.setEmail(binanceAccountToCreate.getEmail());
+        return this.binanceAccountRepository.save(binanceAccountToCreate); 
     }
     
     @Transactional
-    public List<String> login(String email, String password){        
+    public String login(String email, String password){        
         
         String token = "";
-        String cause = "unregistered";
-        List<String> table = new ArrayList<>();
         String hexHash = StringTool.bytesToHex(messageDigest.digest(password.getBytes(StandardCharsets.UTF_8)));
-        BinanceAccount binanceAccountExists = binanceAccountRepository.findByEmail(email);
         BinanceAccount binanceAccount = binanceAccountRepository.findByEmailAndPassword(email, hexHash);
         
-        if (binanceAccountExists!=null) {
-        	cause = "password";
-
 	        if( binanceAccount!=null ){
 	            //on génère une token
 	            token=UUID.randomUUID().toString();
 	            binanceAccount.setToken(token);
 	            binanceAccount.setTokenInstant(Instant.now());
 	            binanceAccountRepository.save(binanceAccount);
-	            cause="";
 	        }
-        }
-        table.add(token);
-        table.add(cause);
-        return table;
+        return token;
+    }
+    
+    @Transactional
+    public BinanceAccount findBinanceAccount(Long id) {
+        Optional<BinanceAccount> binanceAccount = binanceAccountRepository.findById(id);
+        return binanceAccount.get();
     }
     
     @Transactional
