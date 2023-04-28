@@ -26,7 +26,10 @@ public class InitAndConfig implements WebMvcConfigurer {
 	        .addMapping("/**")
 	        .allowedOrigins("*")
 	        .allowedMethods("OPTIONS","GET", "POST", "PUT", "PATCH", "DELETE")
-	        .allowedHeaders("Content-Type");
+	        .allowedHeaders(
+	        		//"Content-Type","Authorization"
+	        		"*"
+	        		);
     }
     
     @Bean

@@ -7,6 +7,9 @@ package src.main.java.com.oas.iatradingbot.model;
 import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,22 +23,36 @@ import jakarta.persistence.Id;
  * @author oandrade
  */
 @Entity
+//@JsonIgnoreProperties(
+	//	value = "binanceApiSecret"
+		//, allowSetters = true
+	//	)
 public class BinanceAccount{
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+	
 	// rdu on s'assure que chaque valeur de la colonne sera unique
 	@Column(unique = true)
     private String binanceApiKey;
-    @JsonIgnore//a parametrer en reception only
+	
+	//rdu propriété accessible au front en écriture seule
+	@JsonProperty(access = Access.WRITE_ONLY)
     @Column(unique = true)
     private String binanceApiSecret;
+	
+	//rdu propriété en lecture seule qui indique si une clé secrete est enregistrée sur le compte
+	@JsonProperty(access = Access.READ_ONLY)
+	private Boolean isApiSecretSet = Boolean.FALSE; ;
+	
     @Column(unique = true)
     private String binanceAccountId;
-    //@JsonIgnore
-    //rdu info necessaire pour indiquer a l'utilisateur que le compte est actif/inactif
-    private Boolean suspended = Boolean.TRUE; // suspendu par défault tant que l'on n'a pas vérifier les possibilités de l'api et que c'est bien un filleul    
+    
+    //rdu propriété en lecture seule pour le front
+ 	@JsonProperty(access = Access.READ_ONLY)
+    private Boolean suspended = Boolean.TRUE; // suspendu par défault tant que l'on n'a pas vérifier les possibilités de l'api et que c'est bien un filleul 
+ 	
     @JsonIgnore
     private String suspensionReason = "Initial state";
     @Column(unique = true)
@@ -89,8 +106,16 @@ public class BinanceAccount{
     public void setBinanceAccountId(String binanceAccountId) {
         this.binanceAccountId = binanceAccountId;
     }
+    
+    public Boolean getIsApiSecretSet() {
+		return isApiSecretSet;
+	}
 
-    public Boolean getSuspended() {
+	public void setIsApiSecretSet(Boolean isApiSecretSet) {
+		this.isApiSecretSet = isApiSecretSet;
+	}
+
+	public Boolean getSuspended() {
         return suspended;
     }
 
