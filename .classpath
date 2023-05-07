@@ -179,6 +179,5 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/apdu7/.m2/repository/org/springframework/boot/spring-boot-devtools/3.0.4/spring-boot-devtools-3.0.4.jar"/>
 	<classpathentry kind="lib" path="C:/Users/apdu7/.m2/repository/org/json/json-20230227.jar"/>
-	<classpathentry kind="lib" path="C:/Users/apdu7/.m2/repository/com/fasterxml/jackson/jaxrs/jackson-jaxrs-json-provider-2.14.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
