@@ -71,17 +71,6 @@
 			<attribute name="maven.scope" value="compile"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/apdu7/.m2/repository/org/springframework/spring-beans/6.0.6/spring-beans-6.0.6.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/C:/Users/apdu7/.m2/repository/org/springframework/spring-beans/6.0.6/spring-beans-6.0.6-javadoc.jar!/"/>
-			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="org.eclipse.jst.component.archivename" value="spring-beans-6.0.6.jar"/>
-			<attribute name="maven.groupId" value="org.springframework"/>
-			<attribute name="maven.artifactId" value="spring-beans"/>
-			<attribute name="maven.version" value="6.0.6"/>
-			<attribute name="maven.scope" value="compile"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/apdu7/.m2/repository/org/springframework/data/spring-data-jpa/3.0.3/spring-data-jpa-3.0.3.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:file:/C:/Users/apdu7/.m2/repository/org/springframework/data/spring-data-jpa/3.0.3/spring-data-jpa-3.0.3-javadoc.jar!/"/>
@@ -118,16 +107,6 @@
 			<attribute name="org.eclipse.jst.component.archivename" value="spring-boot-3.0.4.jar"/>
 			<attribute name="maven.groupId" value="org.springframework.boot"/>
 			<attribute name="maven.artifactId" value="spring-boot"/>
-			<attribute name="maven.version" value="3.0.4"/>
-			<attribute name="maven.scope" value="compile"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/apdu7/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/3.0.4/spring-boot-autoconfigure-3.0.4.jar" sourcepath="C:/Users/apdu7/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/3.0.4/spring-boot-autoconfigure-3.0.4-sources.jar">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="org.eclipse.jst.component.archivename" value="spring-boot-autoconfigure-3.0.4.jar"/>
-			<attribute name="maven.groupId" value="org.springframework.boot"/>
-			<attribute name="maven.artifactId" value="spring-boot-autoconfigure"/>
 			<attribute name="maven.version" value="3.0.4"/>
 			<attribute name="maven.scope" value="compile"/>
 		</attributes>
@@ -179,5 +158,10 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/apdu7/.m2/repository/org/springframework/boot/spring-boot-devtools/3.0.4/spring-boot-devtools-3.0.4.jar"/>
 	<classpathentry kind="lib" path="C:/Users/apdu7/.m2/repository/org/json/json-20230227.jar"/>
+	<classpathentry kind="lib" path="C:/Users/apdu7/.m2/repository/jakarta/mail/jakarta.mail-api-2.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/apdu7/.m2/repository/org/springframework/spring-core/6.0.8/spring-core-6.0.8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/apdu7/.m2/repository/org/springframework/spring-context-support/6.0.8/spring-context-support-6.0.8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/apdu7/.m2/repository/org/springframework/spring-beans/6.0.8/spring-beans-6.0.8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/apdu7/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/3.0.6/spring-boot-autoconfigure-3.0.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
