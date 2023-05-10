@@ -1,4 +1,4 @@
-package src.main.java.com.oas.iatradingbot.rest;
+package com.oas.iatradingbot.rest;
 
 import java.util.HashMap;
 

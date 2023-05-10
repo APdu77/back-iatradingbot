@@ -31,4 +31,11 @@
 		<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>java</name>
+			<type>2</type>
+			<location>C:/Users/apdu7/Documents/DIGINAMIC/WorkSpaceST/back-iatradingbot/src/main/java</location>
+		</link>
+	</linkedResources>
 </projectDescription>

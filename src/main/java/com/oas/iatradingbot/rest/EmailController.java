@@ -1,4 +1,4 @@
-package src.main.java.com.oas.iatradingbot.rest;
+package com.oas.iatradingbot.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import src.main.java.com.oas.iatradingbot.services.EmailService;
+import com.oas.iatradingbot.services.EmailService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8100")

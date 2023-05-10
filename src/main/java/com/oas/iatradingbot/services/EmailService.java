@@ -1,11 +1,11 @@
-package src.main.java.com.oas.iatradingbot.services;
+package com.oas.iatradingbot.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import src.main.java.com.oas.iatradingbot.repositories.BinanceAccountRepository;
+import com.oas.iatradingbot.repositories.BinanceAccountRepository;
 
 @Service
 public class EmailService {

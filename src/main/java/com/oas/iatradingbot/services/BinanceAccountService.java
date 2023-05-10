@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package src.main.java.com.oas.iatradingbot.services;
+package com.oas.iatradingbot.services;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import src.main.java.com.oas.iatradingbot.model.BinanceAccount;
-import src.main.java.com.oas.iatradingbot.model.ChangePassword;
-import src.main.java.com.oas.iatradingbot.repositories.BinanceAccountRepository;
-import src.main.java.com.oas.iatradingbot.tools.StringTool;
+import com.oas.iatradingbot.model.BinanceAccount;
+import com.oas.iatradingbot.model.ChangePassword;
+import com.oas.iatradingbot.repositories.BinanceAccountRepository;
+import com.oas.iatradingbot.tools.StringTool;
 
 /**
  * Service de gestion des comptes utilisateurs du Bot créés par l'app mobile

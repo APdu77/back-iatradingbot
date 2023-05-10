@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package src.main.java.com.oas.iatradingbot.model;
+package com.oas.iatradingbot.model;
 
 import java.time.Instant;
 

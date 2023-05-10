@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package src.main.java.com.oas.iatradingbot.rest;
+package com.oas.iatradingbot.rest;
 
 import java.util.List;
 
@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.persistence.EntityNotFoundException;
-import src.main.java.com.oas.iatradingbot.model.BinanceAccount;
-import src.main.java.com.oas.iatradingbot.model.ChangePassword;
-import src.main.java.com.oas.iatradingbot.services.BinanceAccountService;
+import com.oas.iatradingbot.model.BinanceAccount;
+import com.oas.iatradingbot.model.ChangePassword;
+import com.oas.iatradingbot.services.BinanceAccountService;
 
 /**
  *

@@ -1,4 +1,4 @@
-package src.main.java.com.oas.iatradingbot.model;
+package com.oas.iatradingbot.model;
 
 
 
