@@ -4,29 +4,33 @@
  */
 package com.oas.iatradingbot.services;
 
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import com.oas.iatradingbot.model.BinanceAccount;
 import com.oas.iatradingbot.model.ChangePassword;
+import com.oas.iatradingbot.model.ValidationMailType;
 import com.oas.iatradingbot.repositories.BinanceAccountRepository;
 import com.oas.iatradingbot.tools.StringTool;
 
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+
 /**
  * Service de gestion des comptes utilisateurs du Bot créés par l'app mobile
- * 
+ *
  * @author oandrade
  */
 @Service
@@ -35,17 +39,55 @@ public class BinanceAccountService {
 	@Autowired
 	BinanceAccountRepository binanceAccountRepository;
 	@Autowired
+	EmailService emailService;
+	@Autowired
 	MessageDigest messageDigest;
 
 	@Transactional
-	public BinanceAccount createBinanceAccount(BinanceAccount binanceAccountToCreate) {
+	public BinanceAccount createBinanceAccount(BinanceAccount binanceAccountToCreate){
+		BinanceAccount binanceAccountFound = binanceAccountRepository.findByEmail(binanceAccountToCreate.getEmail());
 		String hexHash = StringTool.bytesToHex(
 				messageDigest.digest(binanceAccountToCreate.getPassword().getBytes(StandardCharsets.UTF_8)));
 		binanceAccountToCreate.setPassword(hexHash);
 		// redondance??
-		binanceAccountToCreate.setEmail(binanceAccountToCreate.getEmail());
-		return this.binanceAccountRepository.save(binanceAccountToCreate);
+		//binanceAccountToCreate.setEmail(binanceAccountToCreate.getEmail());
+		String validationMailKey = UUID.randomUUID().toString();
+		binanceAccountToCreate.setMailValidationKey(validationMailKey);
+		binanceAccountToCreate.setMailValidationKeyInstant(Instant.now());
+		if (binanceAccountFound != null && binanceAccountFound.getValidatedMail()==false) {
+			binanceAccountRepository.deleteById(binanceAccountFound.getId());
+			binanceAccountRepository.flush();
+		}
+		
+		try {
+			BinanceAccount binanceAccountCreated = this.binanceAccountRepository.save(binanceAccountToCreate);
+			this.emailService.sendMessage(binanceAccountCreated, ValidationMailType.CREATION);
+			return binanceAccountCreated ;
+		} catch (Exception e) {
+			throw e;
+		}
+		
 	}
+	
+	@Transactional
+	public BinanceAccount validateBinanceAccount(String keyToCheck)throws Exception{
+		Optional<BinanceAccount> binanceAccount = binanceAccountRepository.findByMailValidationKey(keyToCheck);
+		//Instant mailValidationKeyInstant =  binanceAccount.get().getMailValidationKeyInstant();
+
+		if( binanceAccount.isPresent() &&
+				Duration.between(binanceAccount.get().getMailValidationKeyInstant(), Instant.now()).getSeconds() <= 3600 ) {
+			binanceAccount.get().setValidatedMail(true);
+			binanceAccount.get().setMailValidationKey(null);
+			binanceAccount.get().setMailValidationKeyInstant(null);
+			return binanceAccountRepository.save(binanceAccount.get());
+		} else if (binanceAccount.isEmpty()) {
+			throw new EntityNotFoundException("Code de vérification incorrect !!");
+		} else
+			throw new ArithmeticException("Votre code de vérification a expiré !");
+		// redondance??
+		//binanceAccountToCreate.setEmail(binanceAccountToCreate.getEmail());
+	}
+	
 
 	@Transactional
 	public BinanceAccount updateBinanceAccount(BinanceAccount binanceAccountToUpdate) {
@@ -87,7 +129,7 @@ public class BinanceAccountService {
 		String password = jsonLoginToken.get("password").toString();
 		String hexHash = StringTool.bytesToHex(messageDigest.digest(password.getBytes(StandardCharsets.UTF_8)));
 		BinanceAccount binanceAccount = binanceAccountRepository.findByEmailAndPassword(email, hexHash);
-		if (binanceAccount != null) {
+		if (binanceAccount != null && binanceAccount.getValidatedMail()) {
 			// on génère une token
 			token = UUID.randomUUID().toString();
 			binanceAccount.setToken(token);
@@ -122,7 +164,8 @@ public class BinanceAccountService {
 		String password = passwords.getPassword();
 		String newPassword = passwords.getNewPassword();
 		String confirmPassword = passwords.getConfirmPassword();
-		String hexHash = StringTool.bytesToHex(messageDigest.digest(newPassword.getBytes(StandardCharsets.UTF_8)));
+		String hexHash = StringTool.bytesToHex(messageDigest.digest(password.getBytes(StandardCharsets.UTF_8)));
+		String newHexHash = StringTool.bytesToHex(messageDigest.digest(newPassword.getBytes(StandardCharsets.UTF_8)));
 
 		BinanceAccount binanceAccount = this.binanceAccountRepository.findByToken(token);
 
@@ -133,7 +176,7 @@ public class BinanceAccountService {
 		} else if (!newPassword.equals(confirmPassword)) {
 			cause = "not matching";
 		} else
-			binanceAccount.setPassword(hexHash);
+			binanceAccount.setPassword(newHexHash);
 			binanceAccountRepository.save(binanceAccount);
 
 		return cause;
@@ -146,6 +189,16 @@ public class BinanceAccountService {
 		// }
 		// return false;
 		return binanceAccount != null;
+	}
+	
+	public Boolean prepareMessage(BinanceAccount binanceAccountToCreateAccount) {
+		
+		//BinanceAccount binanceAccount = binanceAccountRepository.findByToken(token);
+		// if(binanceAccount != null){
+		// return true;
+		// }
+		// return false;
+		return null;
 	}
 
 }

@@ -7,7 +7,6 @@ package com.oas.iatradingbot.model;
 import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -32,32 +31,33 @@ public class BinanceAccount{
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-	
+
 	// rdu on s'assure que chaque valeur de la colonne sera unique
 	@Column(unique = true)
     private String binanceApiKey;
-	
+
 	//rdu propriété accessible au front en écriture seule
 	@JsonProperty(access = Access.WRITE_ONLY)
     @Column(unique = true)
     private String binanceApiSecret;
-	
+
 	//rdu propriété en lecture seule qui indique si une clé secrete est enregistrée sur le compte
 	@JsonProperty(access = Access.READ_ONLY)
-	private Boolean isApiSecretSet = Boolean.FALSE; ;
-	
+	private Boolean isApiSecretSet = Boolean.FALSE;
+
     @Column(unique = true)
     private String binanceAccountId;
-    
+
     //rdu propriété en lecture seule pour le front
  	@JsonProperty(access = Access.READ_ONLY)
-    private Boolean suspended = Boolean.TRUE; // suspendu par défault tant que l'on n'a pas vérifier les possibilités de l'api et que c'est bien un filleul 
- 	
+    private Boolean suspended = Boolean.TRUE; // suspendu par défault tant que l'on n'a pas vérifier les possibilités de l'api et que c'est bien un filleul
+
     @JsonIgnore
     private String suspensionReason = "Initial state";
     @Column(unique = true)
     private String email;
-    @JsonIgnore
+    // a revoir
+    @JsonProperty(access = Access.WRITE_ONLY)
     private String password;
     @JsonIgnore
     private String token;
@@ -65,7 +65,12 @@ public class BinanceAccount{
     private Instant createInstant=Instant.now();
     @JsonIgnore
     private Instant tokenInstant;
-    
+    @JsonIgnore
+    private String mailValidationKey;
+    @JsonIgnore
+    private Instant mailValidationKeyInstant;
+    @JsonProperty(access = Access.READ_ONLY)
+    private Boolean validatedMail = Boolean.FALSE;
     public BinanceAccount(){}
 
     public BinanceAccount(String binanceApiKey, String binanceApiSecret) {
@@ -80,8 +85,6 @@ public class BinanceAccount{
     public void setId(Long id) {
         this.id = id;
     }
-    
-    
 
     public String getBinanceApiKey() {
         return binanceApiKey;
@@ -106,7 +109,7 @@ public class BinanceAccount{
     public void setBinanceAccountId(String binanceAccountId) {
         this.binanceAccountId = binanceAccountId;
     }
-    
+
     public Boolean getIsApiSecretSet() {
 		return isApiSecretSet;
 	}
@@ -130,7 +133,7 @@ public class BinanceAccount{
     public void setSuspensionReason(String suspensionReason) {
         this.suspensionReason = suspensionReason;
     }
-	
+
     public String getEmail() {
         return email;
     }
@@ -146,7 +149,7 @@ public class BinanceAccount{
     public String getPassword() {
         return password;
     }
-    
+
     public String getToken() {
         return token;
     }
@@ -171,6 +174,30 @@ public class BinanceAccount{
         this.tokenInstant = tokenInstant;
     }
 
-   
+	public String getMailValidationKey() {
+		return mailValidationKey;
+	}
+
+	public void setMailValidationKey(String mailValidationKey) {
+		this.mailValidationKey = mailValidationKey;
+	}
+	
+	public Instant getMailValidationKeyInstant() {
+		return mailValidationKeyInstant;
+	}
+
+	public void setMailValidationKeyInstant(Instant mailValidationKeyInstant) {
+		this.mailValidationKeyInstant = mailValidationKeyInstant;
+	}
+
+	public Boolean getValidatedMail() {
+		return validatedMail;
+	}
+
+	public void setValidatedMail(Boolean validatedMail) {
+		this.validatedMail = validatedMail;
+	}
+
+
 
 }

@@ -4,12 +4,7 @@
  */
 package com.oas.iatradingbot.rest;
 
-import java.util.List;
-
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jackson.JsonObjectDeserializer;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,10 +16,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.persistence.EntityNotFoundException;
 import com.oas.iatradingbot.model.BinanceAccount;
 import com.oas.iatradingbot.model.ChangePassword;
 import com.oas.iatradingbot.services.BinanceAccountService;
+
+import jakarta.persistence.EntityNotFoundException;
 
 /**
  *
@@ -53,10 +49,23 @@ public class Account {
 
 	/**
 	 * Create account
+	 * @throws Exception 
 	 */
-	@PostMapping(path = "/")
-	public BinanceAccount createBinanceAccount(@RequestBody BinanceAccount binanceAccountToCreate) {
-		return this.binanceAccountService.createBinanceAccount(binanceAccountToCreate);
+	@PostMapping(path = "/message")
+	public BinanceAccount createBinanceAccount(@RequestBody BinanceAccount binanceAccountToCreate) throws Exception{
+		System.out.println(binanceAccountToCreate.getEmail());
+		System.out.println(binanceAccountToCreate.getPassword());
+		BinanceAccount binanceAccount = this.binanceAccountService.createBinanceAccount(binanceAccountToCreate);
+		return binanceAccount;
+	}
+	
+	/**
+	 * Validate account creation key
+	 * @throws Exception 
+	 */
+	@PostMapping(path = "/validation")
+	public BinanceAccount validateateBinanceAccount(@RequestBody String mailValidationKey) throws Exception{
+		return this.binanceAccountService.validateBinanceAccount(mailValidationKey);
 	}
 
 	/**
@@ -97,7 +106,7 @@ public class Account {
 
 	/**
 	 * Try to log the user
-	 * 
+	 *
 	 * @param email
 	 * @param password
 	 * @return the session token, empty if error

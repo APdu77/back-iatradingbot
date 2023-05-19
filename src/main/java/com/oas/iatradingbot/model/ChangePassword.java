@@ -4,12 +4,12 @@ package com.oas.iatradingbot.model;
 
 
 public class ChangePassword {
-	
+
 	private String password;
-	
+
 	private String newPassword;
-	
-	private String confirmPassword;	
+
+	private String confirmPassword;
 
 	public String getPassword() {
 		return password;
@@ -34,7 +34,7 @@ public class ChangePassword {
 	public void setConfirmPassword(String confirmPassword) {
 		this.confirmPassword = confirmPassword;
 	}
-	
-	
+
+
 
 }

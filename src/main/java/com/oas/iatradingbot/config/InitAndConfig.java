@@ -6,8 +6,7 @@ package com.oas.iatradingbot.config;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import okhttp3.internal.ws.RealWebSocket;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -31,7 +30,7 @@ public class InitAndConfig implements WebMvcConfigurer {
 	        		"*"
 	        		);
     }
-    
+
     @Bean
     public MessageDigest messageDigest(){
         MessageDigest md = null;
@@ -41,7 +40,7 @@ public class InitAndConfig implements WebMvcConfigurer {
         }
         return md;
     }
-    
-    
-    
+
+
+
 }

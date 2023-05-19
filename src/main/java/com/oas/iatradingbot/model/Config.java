@@ -4,9 +4,10 @@
  */
 package com.oas.iatradingbot.model;
 
+import java.time.Instant;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import java.time.Instant;
 
 /**
  *
@@ -23,7 +24,7 @@ public class Config {
     private Double doubleValue;
     private Instant instantValue;
     private Boolean booleanValue;
-    
+
     public Config(){}
 
     public Config(String configKey, String stringValue) {
@@ -60,8 +61,8 @@ public class Config {
         this.configKey = configKey;
         this.booleanValue = booleanValue;
     }
-    
-    
+
+
 
     public String getConfigKey() {
         return configKey;
@@ -111,7 +112,7 @@ public class Config {
         this.doubleValue = doubleValue;
     }
 
-    
+
     public Instant getInstantValue() {
         return instantValue;
     }
@@ -127,5 +128,5 @@ public class Config {
     public void setBooleanValue(Boolean booleanValue) {
         this.booleanValue = booleanValue;
     }
-    
+
 }

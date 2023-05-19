@@ -4,13 +4,14 @@
  */
 package com.oas.iatradingbot.repositories;
 
-import com.oas.iatradingbot.model.Config;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.oas.iatradingbot.model.Config;
 
 /**
  *
  * @author oandrade
  */
 public interface ConfigRepository extends JpaRepository<Config,String> {
-    
+
 }

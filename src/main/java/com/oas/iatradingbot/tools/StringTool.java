@@ -11,8 +11,8 @@ package com.oas.iatradingbot.tools;
 public class StringTool {
     public static String bytesToHex(byte[] hash) {
         StringBuilder hexString = new StringBuilder(2 * hash.length);
-        for (int i = 0; i < hash.length; i++) {
-            String hex = Integer.toHexString(0xff & hash[i]);
+        for (byte element : hash) {
+            String hex = Integer.toHexString(0xff & element);
             if(hex.length() == 1) {
                 hexString.append('0');
             }
