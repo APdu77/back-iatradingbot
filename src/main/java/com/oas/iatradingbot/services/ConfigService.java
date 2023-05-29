@@ -30,9 +30,9 @@ public class ConfigService {
         Optional<Config> configOptional;
         Config config;
 
-        configOptional = configRepository.findById("sponsorShipLink");
+        configOptional = configRepository.findById("sponsorshipLink");
         if(configOptional.isEmpty()){
-            config = new Config("sponsorShipLink", "https://accounts.binance.com/register?ref=385030280");
+            config = new Config("sponsorshipLink", "https://accounts.binance.com/register?ref=385030280");
             configRepository.save(config);
         }
         configOptional = configRepository.findById("apiTutorial");

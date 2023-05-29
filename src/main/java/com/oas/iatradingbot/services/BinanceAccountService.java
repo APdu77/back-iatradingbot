@@ -11,6 +11,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,10 +22,11 @@ import org.springframework.stereotype.Service;
 
 import com.oas.iatradingbot.model.BinanceAccount;
 import com.oas.iatradingbot.model.ChangePassword;
-import com.oas.iatradingbot.model.ValidationMailType;
+import com.oas.iatradingbot.enumeration.ValidationMailType;
 import com.oas.iatradingbot.repositories.BinanceAccountRepository;
 import com.oas.iatradingbot.tools.StringTool;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
@@ -82,8 +84,9 @@ public class BinanceAccountService {
 			return binanceAccountRepository.save(binanceAccount.get());
 		} else if (binanceAccount.isEmpty()) {
 			throw new EntityNotFoundException("Code de vérification incorrect !!");
-		} else
+		} else {
 			throw new ArithmeticException("Votre code de vérification a expiré !");
+		}
 		// redondance??
 		//binanceAccountToCreate.setEmail(binanceAccountToCreate.getEmail());
 	}
@@ -91,32 +94,25 @@ public class BinanceAccountService {
 
 	@Transactional
 	public BinanceAccount updateBinanceAccount(BinanceAccount binanceAccountToUpdate) {
-		// update specifique pour pwd ? a voir
+
 		BinanceAccount binanceAccount = this.binanceAccountRepository.findById(binanceAccountToUpdate.getId()).get();
 
-		if (binanceAccountToUpdate.getBinanceApiKey() != null
-				&& !binanceAccountToUpdate.getBinanceApiKey().equals(binanceAccount.getBinanceApiKey())) {
+		if (binanceAccountToUpdate.getBinanceApiKey() != null &&
+			!binanceAccountToUpdate.getBinanceApiKey().equals(binanceAccount.getBinanceApiKey())) {
 			binanceAccount.setBinanceApiKey(binanceAccountToUpdate.getBinanceApiKey());
 		}
-
-		else if (binanceAccountToUpdate.getBinanceApiSecret() != null
-				&& !binanceAccountToUpdate.getBinanceApiSecret().equals(binanceAccount.getBinanceApiSecret())) {
+		
+		else if (binanceAccountToUpdate.getBinanceApiSecret() != null &&
+			!binanceAccountToUpdate.getBinanceApiSecret().equals(binanceAccount.getBinanceApiSecret())) {
 			binanceAccount.setBinanceApiSecret(binanceAccountToUpdate.getBinanceApiSecret());
 			binanceAccount.setIsApiSecretSet(true);
 		}
-
-		else if (binanceAccountToUpdate.getBinanceAccountId() != null
-				&& !binanceAccountToUpdate.getBinanceAccountId().equals(binanceAccount.getBinanceAccountId())) {
+		
+		else if (binanceAccountToUpdate.getBinanceAccountId() != null &&
+			!binanceAccountToUpdate.getBinanceAccountId().equals(binanceAccount.getBinanceAccountId())) {
 			binanceAccount.setBinanceAccountId(binanceAccountToUpdate.getBinanceAccountId());
 		}
-		System.out.println("id:" + binanceAccountToUpdate.getBinanceAccountId());
-		System.out.println("api:" + binanceAccountToUpdate.getBinanceApiKey());
-		System.out.println("secret:" + binanceAccountToUpdate.getBinanceApiSecret());
-		System.out.println("-------------------------------");
-		System.out.println("id:" + binanceAccount.getBinanceAccountId());
-		System.out.println("api:" + binanceAccount.getBinanceApiKey());
-		System.out.println("secret:" + binanceAccount.getBinanceApiSecret());
-		System.out.println(binanceAccountToUpdate.getIsApiSecretSet());
+
 		return this.binanceAccountRepository.save(binanceAccount);
 	}
 
@@ -129,7 +125,7 @@ public class BinanceAccountService {
 		String password = jsonLoginToken.get("password").toString();
 		String hexHash = StringTool.bytesToHex(messageDigest.digest(password.getBytes(StandardCharsets.UTF_8)));
 		BinanceAccount binanceAccount = binanceAccountRepository.findByEmailAndPassword(email, hexHash);
-		if (binanceAccount != null && binanceAccount.getValidatedMail()) {
+		if (binanceAccount != null && binanceAccount.getValidatedMail()==true) {
 			// on génère une token
 			token = UUID.randomUUID().toString();
 			binanceAccount.setToken(token);
@@ -181,6 +177,32 @@ public class BinanceAccountService {
 
 		return cause;
 	}
+	
+	public BinanceAccount changeEmail(BinanceAccount newBinanceAccount) {
+		//Account reellement en base car requete sur l'id
+		BinanceAccount binanceAccountFound = binanceAccountRepository.findById(newBinanceAccount.getId()).get();
+		//on checke si le nouvel email est assiocie a un BinanceAcount en base
+		BinanceAccount binanceAccount = binanceAccountRepository.findByEmail(newBinanceAccount.getEmail());
+		
+		
+		
+		if (binanceAccount==null) {
+			String validationMailKey = UUID.randomUUID().toString();
+			binanceAccountFound.setMailValidationKey(validationMailKey);
+			binanceAccountFound.setMailValidationKeyInstant(Instant.now());
+			binanceAccountFound.setPreviousEmail(binanceAccountFound.getEmail());
+			binanceAccountFound.setEmail(newBinanceAccount.getEmail());
+		} else if (binanceAccount!=null && binanceAccount.getValidatedMail()==true) {
+			throw new EntityExistsException("Un compte associé à cet email existe déjà !");
+		}else if (binanceAccount!=null && binanceAccount.getValidatedMail()==false) {
+			throw new EntityExistsException("Un compte associé à cet email est en cours de création !");
+		}
+		
+		
+		
+		return binanceAccountRepository.save(binanceAccountFound);
+		
+	}
 
 	public Boolean checkHeader(String token) {
 		BinanceAccount binanceAccount = binanceAccountRepository.findByToken(token);
@@ -191,14 +213,5 @@ public class BinanceAccountService {
 		return binanceAccount != null;
 	}
 	
-	public Boolean prepareMessage(BinanceAccount binanceAccountToCreateAccount) {
-		
-		//BinanceAccount binanceAccount = binanceAccountRepository.findByToken(token);
-		// if(binanceAccount != null){
-		// return true;
-		// }
-		// return false;
-		return null;
-	}
 
 }

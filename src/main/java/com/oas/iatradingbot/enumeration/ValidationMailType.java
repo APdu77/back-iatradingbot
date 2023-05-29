@@ -1,4 +1,4 @@
-package com.oas.iatradingbot.model;
+package com.oas.iatradingbot.enumeration;
 
 public enum ValidationMailType {
 

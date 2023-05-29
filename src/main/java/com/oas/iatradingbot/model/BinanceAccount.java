@@ -56,6 +56,8 @@ public class BinanceAccount{
     private String suspensionReason = "Initial state";
     @Column(unique = true)
     private String email;
+    @Column(unique = true)
+    private String previousEmail;
     // a revoir
     @JsonProperty(access = Access.WRITE_ONLY)
     private String password;
@@ -142,7 +144,15 @@ public class BinanceAccount{
         this.email = email;
     }
 
-    public void setPassword(String password) {
+    public String getPreviousEmail() {
+		return previousEmail;
+	}
+
+	public void setPreviousEmail(String previousEmail) {
+		this.previousEmail = previousEmail;
+	}
+
+	public void setPassword(String password) {
         this.password = password;
     }
 

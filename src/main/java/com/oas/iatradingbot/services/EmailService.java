@@ -7,7 +7,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.oas.iatradingbot.model.BinanceAccount;
-import com.oas.iatradingbot.model.ValidationMailType;
+import com.oas.iatradingbot.enumeration.ValidationMailType;
 import com.oas.iatradingbot.repositories.BinanceAccountRepository;
 
 @Service

@@ -44,14 +44,14 @@ public class Account {
 		if (binanceAccountService.checkHeader(token)) {
 			return this.binanceAccountService.findBinanceAccount(id);
 		}
-		throw new EntityNotFoundException("Informations inaccessibles");
+		throw new EntityNotFoundException("Informations inaccessibles !");
 	}
 
 	/**
 	 * Create account
 	 * @throws Exception 
 	 */
-	@PostMapping(path = "/message")
+	@PostMapping(path = "/creation")
 	public BinanceAccount createBinanceAccount(@RequestBody BinanceAccount binanceAccountToCreate) throws Exception{
 		System.out.println(binanceAccountToCreate.getEmail());
 		System.out.println(binanceAccountToCreate.getPassword());
@@ -78,7 +78,7 @@ public class Account {
 		if (binanceAccountService.checkHeader(token)) {
 			return this.binanceAccountService.updateBinanceAccount(binanceAccountToUpdate);
 		}
-		throw new EntityNotFoundException("Informations innaccessibles");
+		throw new EntityNotFoundException("Modification impossible !");
 	}
 
 	@PostMapping(path = "/password"
@@ -101,7 +101,19 @@ public class Account {
 			return "{\"message\":\"" + message + "\",\"cause\":\"" + cause + "\"}";
 
 		}
-		throw new EntityNotFoundException("Modifications impossibles");
+		throw new EntityNotFoundException("Modification impossible !");
+	}
+	
+	/**
+	 * Change account email
+	 */
+	@PostMapping(path = "/email")
+	public BinanceAccount changeEmail(@RequestBody BinanceAccount binanceAccountToUpdate,
+			@RequestHeader("authorization") String token) throws Exception {
+		if (binanceAccountService.checkHeader(token)) {
+			return this.binanceAccountService.changeEmail(binanceAccountToUpdate);
+		}
+		throw new EntityNotFoundException("Modification impossible !");
 	}
 
 	/**
