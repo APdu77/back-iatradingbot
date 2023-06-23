@@ -157,5 +157,14 @@
 	<classpathentry kind="lib" path="C:/Users/apdu7/.m2/repository/org/springframework/spring-context-support/6.0.8/spring-context-support-6.0.8.jar"/>
 	<classpathentry kind="lib" path="C:/Users/apdu7/.m2/repository/org/springframework/spring-beans/6.0.8/spring-beans-6.0.8.jar"/>
 	<classpathentry kind="lib" path="C:/Users/apdu7/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/3.0.6/spring-boot-autoconfigure-3.0.6.jar"/>
+	<classpathentry kind="lib" path="C:/Users/apdu7/.m2/repository/io/github/binance/binance-connector-java/2.0.0/binance-connector-java-2.0.0.jar" sourcepath="C:/Users/apdu7/.m2/repository/io/github/binance/binance-connector-java/2.0.0/binance-connector-java-2.0.0-sources.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="io.github.binance"/>
+			<attribute name="maven.artifactId" value="binance-connector-java"/>
+			<attribute name="maven.version" value="2.0.0"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

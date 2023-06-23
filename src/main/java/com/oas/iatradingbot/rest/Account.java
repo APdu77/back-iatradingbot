@@ -67,6 +67,15 @@ public class Account {
 	public BinanceAccount validateateBinanceAccount(@RequestBody String mailValidationKey) throws Exception{
 		return this.binanceAccountService.validateBinanceAccount(mailValidationKey);
 	}
+	
+	/**
+	 * Validate the key to allow email change
+	 * @throws Exception 
+	 */
+	@PostMapping(path = "/newemail")
+	public BinanceAccount validateateNewEmail(@RequestBody String mailValidationKey) throws Exception{
+		return this.binanceAccountService.validateBinanceAccount(mailValidationKey);
+	}
 
 	/**
 	 * Update account info
@@ -114,6 +123,18 @@ public class Account {
 			return this.binanceAccountService.changeEmail(binanceAccountToUpdate);
 		}
 		throw new EntityNotFoundException("Modification impossible !");
+	}
+	
+	/**
+	 * access the Binance wallet info
+	 */
+	@PostMapping(path = "/wallet")
+	public String accessWallet(@RequestBody String token1,
+			@RequestHeader("authorization") String token) throws Exception {
+		if (binanceAccountService.checkHeader(token)) {
+			return this.binanceAccountService.accessWallet(token1);
+		}
+		throw new EntityNotFoundException("Informations inaccessibles !");
 	}
 
 	/**

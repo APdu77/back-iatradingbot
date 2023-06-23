@@ -27,11 +27,15 @@ public interface BinanceAccountRepository extends JpaRepository<BinanceAccount,L
     // Requete pour retrouver la liste des BinanceAcount non validés et 
     // dont le mailValidationKey a expiré (> 60 minutes)
  	@Query("FROM BinanceAccount b " + "WHERE b.validatedMail = false "
- 	+ "AND CURRENT_TIMESTAMP - b.mailValidationKeyInstant > 1080000000")
+ 	+ "AND CURRENT_TIMESTAMP - b.mailValidationKeyInstant > 3600000")
  	List<BinanceAccount> findAllExpirated();
  	
  	@Query("FROM BinanceAccount b " + "WHERE b.validatedMail = false "
- 		 	+ "AND CURRENT_TIMESTAMP - b.mailValidationKeyInstant < 1080000000")
+ 		 	+ "AND CURRENT_TIMESTAMP - b.mailValidationKeyInstant < 3600000")
  		 	List<BinanceAccount> findAllNotExpirated();
+ 	
+ 	//@Query("FROM BinanceAccount b " + "WHERE b.validatedMail = false "
+ 	//	 	+ "AND b.mailValidationKeyInstant > DATE_SUB(CURRENT_TIMESTAMP,INTERVAL 1 HOUR) ")
+ 	//	 	List<BinanceAccount> findAllExpirated2();
 
 }

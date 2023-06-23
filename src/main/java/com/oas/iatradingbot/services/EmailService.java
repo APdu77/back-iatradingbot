@@ -22,22 +22,25 @@ public class EmailService {
 		this.emailSender = emailSender;
 	}
 
-	public void sendMessage(BinanceAccount binanceAccountCreated, ValidationMailType type) {
+	public void sendMessage(BinanceAccount binanceAccount, ValidationMailType type) {
 		SimpleMailMessage message = new SimpleMailMessage();
 		String subject = "";
 		String text = "";
-		String information = "\nVotre code est valable 60 minutes. Veuillez l'utiliser avant son expiration."
+		String creationText = "\nVotre code est valable 60 minutes. Veuillez l'utiliser avant son expiration."
 				+ "\nSi vous n’êtes pas à l’origine de cette action, veuillez ignorer ce mail.";
-		String to = binanceAccountCreated.getEmail() ;
-		String key = binanceAccountCreated.getMailValidationKey() ;
+		String modificationText = "\nVotre code est valable 5 minutes. Veuillez l'utiliser avant son expiration."
+				+ "\nSi vous n’êtes pas à l’origine de cette action, veuillez ignorer ce mail.";
+		String to = binanceAccount.getEmail() ;
+		String key = binanceAccount.getMailValidationKey() ;
 		
+		//message personalise selon le type de demande (creation compte ou modification email)
 		if (type == ValidationMailType.CREATION) {
 			subject = "Création de votre compte CryptoEcoloApp";
-			text = "Bienvenue sur CryptoEcoloApp, votre code de verification est: " + key + " ."+ information;
+			text = "Bienvenue sur CryptoEcoloApp, votre code de verification est: " + key + " ."+ creationText;
 		} else {
 			subject = "Changement de votre adresse mail CryptoEcoloApp";
 			text = "Une demande de modification de votre adresse mail a été effectuée sur votre compte, votre code de verification est: "
-				+ key + " ."+ information;
+				+ key + " ."+ modificationText;
 		}	
 		message.setFrom("postmaster@olivierandrade.fr");
 		message.setTo(to);
