@@ -39,8 +39,6 @@ public class Account {
 	@GetMapping(path = "/{id}")
 	public BinanceAccount findBinanceAccount(@PathVariable("id") Long id, @RequestHeader("authorization") String token)
 			throws Exception {
-		// todo verif token dans le header
-		System.out.println(token);
 		if (binanceAccountService.checkHeader(token)) {
 			return this.binanceAccountService.findBinanceAccount(id);
 		}
@@ -53,8 +51,6 @@ public class Account {
 	 */
 	@PostMapping(path = "/creation")
 	public BinanceAccount createBinanceAccount(@RequestBody BinanceAccount binanceAccountToCreate) throws Exception{
-		System.out.println(binanceAccountToCreate.getEmail());
-		System.out.println(binanceAccountToCreate.getPassword());
 		BinanceAccount binanceAccount = this.binanceAccountService.createBinanceAccount(binanceAccountToCreate);
 		return binanceAccount;
 	}
@@ -83,26 +79,18 @@ public class Account {
 	@PutMapping(path = "/")
 	public BinanceAccount updateBinanceAccount(@RequestBody BinanceAccount binanceAccountToUpdate,
 			@RequestHeader("authorization") String token) throws Exception {
-		System.out.println(token);
 		if (binanceAccountService.checkHeader(token)) {
 			return this.binanceAccountService.updateBinanceAccount(binanceAccountToUpdate);
 		}
 		throw new EntityNotFoundException("Modification impossible !");
 	}
 
-	@PostMapping(path = "/password"
-			//, consumes = { "text/plain;charset=UTF-8","application/json" }
-			//, headers = "Content-Type=text/plain;charset=UTF-8"
-					//, produces = MediaType.APPLICATION_JSON_VALUE
-					)
+	/**
+	 * Change account email
+	 */
+	@PostMapping(path = "/password")
 	public Object changepassword(@RequestBody ChangePassword passwords,
-			// public Object changepassword(@RequestBody JSONObject passwords,
 			@RequestHeader("authorization") String token) throws Exception {
-		// System.out.println(passwords.getPassword());
-		// System.out.println(token);
-		// JSONObject json = new JSONObject(passwords.toString());
-		// System.out.println(json);
-		// .out.println(json.get("password"));
 		if (binanceAccountService.checkHeader(token)) {
 			String cause = this.binanceAccountService.changePassword(passwords, token);
 			String message = cause.length() == 0 ? "OK" : "KO";
@@ -129,29 +117,25 @@ public class Account {
 	 * access the Binance wallet info
 	 */
 	@PostMapping(path = "/wallet")
-	public String accessWallet(@RequestBody String token1,
-			@RequestHeader("authorization") String token) throws Exception {
-		if (binanceAccountService.checkHeader(token)) {
-			return this.binanceAccountService.accessWallet(token1);
+	public String accessWallet(@RequestBody String token,
+			@RequestHeader("authorization") String header) throws Exception {
+		if (binanceAccountService.checkHeader(header)) {
+			return this.binanceAccountService.accessWallet(token);
 		}
 		throw new EntityNotFoundException("Informations inaccessibles !");
 	}
 
 	/**
-	 * Try to log the user
+	 * Try to log in the user
 	 *
 	 * @param email
 	 * @param password
 	 * @return the session token, empty if error
 	 */
 	@PostMapping(path = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-	// rajout de @RequestBody et remplacement des 2 string en param par un objet
-	// BinanceAcoount
-	public Object login(@RequestBody String loginToken) {
-		System.out.println(loginToken);
+		public Object login(@RequestBody String loginToken) {
 		String token = binanceAccountService.login(loginToken);
 		String message = token.length() == 0 ? "KO" : "OK";
-		// peut-etre rajouter id dans la reponse
 		return "{\"message\":\"" + message + "\",\"token\":\"" + token + "\"}";
 	}
 
@@ -161,7 +145,6 @@ public class Account {
 	@PostMapping(path = "/logout")
 	// rdu : logout via token au lieu de email
 	public void logout(@RequestBody String token) {
-		System.out.println(token);
 		binanceAccountService.logout(token);
 	}
 

@@ -9,7 +9,6 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import com.oas.iatradingbot.model.BinanceAccount;
 
@@ -17,9 +16,11 @@ import com.oas.iatradingbot.model.BinanceAccount;
  *
  * @author oandrade
  */
-public interface BinanceAccountRepository extends JpaRepository<BinanceAccount,Long>{
+public interface BinanceAccountRepository extends JpaRepository<BinanceAccount,Long> {
     public BinanceAccount findByEmailAndPassword(String email, String password);
+    
     public BinanceAccount findByEmail(String email);
+    
     public BinanceAccount findByBinanceApiKey(String binanceApiKey);
     public BinanceAccount findByToken(String token);
     public Optional<BinanceAccount> findByMailValidationKey(String mailValidationKey);
@@ -33,9 +34,5 @@ public interface BinanceAccountRepository extends JpaRepository<BinanceAccount,L
  	@Query("FROM BinanceAccount b " + "WHERE b.validatedMail = false "
  		 	+ "AND CURRENT_TIMESTAMP - b.mailValidationKeyInstant < 3600000")
  		 	List<BinanceAccount> findAllNotExpirated();
- 	
- 	//@Query("FROM BinanceAccount b " + "WHERE b.validatedMail = false "
- 	//	 	+ "AND b.mailValidationKeyInstant > DATE_SUB(CURRENT_TIMESTAMP,INTERVAL 1 HOUR) ")
- 	//	 	List<BinanceAccount> findAllExpirated2();
 
 }

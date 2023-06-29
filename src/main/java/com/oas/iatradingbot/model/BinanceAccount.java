@@ -22,10 +22,6 @@ import jakarta.persistence.Id;
  * @author oandrade
  */
 @Entity
-//@JsonIgnoreProperties(
-	//	value = "binanceApiSecret"
-		//, allowSetters = true
-	//	)
 public class BinanceAccount{
 
 	@Id
@@ -73,6 +69,7 @@ public class BinanceAccount{
     private Instant mailValidationKeyInstant;
     @JsonProperty(access = Access.READ_ONLY)
     private Boolean validatedMail = Boolean.FALSE;
+    
     public BinanceAccount(){}
 
     public BinanceAccount(String binanceApiKey, String binanceApiSecret) {
@@ -207,7 +204,5 @@ public class BinanceAccount{
 	public void setValidatedMail(Boolean validatedMail) {
 		this.validatedMail = validatedMail;
 	}
-
-
 
 }

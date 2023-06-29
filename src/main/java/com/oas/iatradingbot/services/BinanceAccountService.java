@@ -4,31 +4,24 @@
  */
 package com.oas.iatradingbot.services;
 
-import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestHeader;
 
-import com.oas.iatradingbot.model.BinanceAccount;
-import com.oas.iatradingbot.model.ChangePassword;
 import com.binance.connector.client.SpotClient;
 import com.binance.connector.client.impl.SpotClientImpl;
-import com.binance.connector.client.impl.spot.Margin;
 import com.binance.connector.client.impl.spot.Wallet;
 import com.oas.iatradingbot.enumeration.ValidationMailType;
+import com.oas.iatradingbot.model.BinanceAccount;
+import com.oas.iatradingbot.model.ChangePassword;
 import com.oas.iatradingbot.repositories.BinanceAccountRepository;
 import com.oas.iatradingbot.tools.StringTool;
 
@@ -60,8 +53,6 @@ public class BinanceAccountService {
 		String hexHash = StringTool.bytesToHex(
 				messageDigest.digest(binanceAccountToCreate.getPassword().getBytes(StandardCharsets.UTF_8)));
 		binanceAccountToCreate.setPassword(hexHash);
-		// redondance??
-		// binanceAccountToCreate.setEmail(binanceAccountToCreate.getEmail());
 		String validationMailKey = UUID.randomUUID().toString();
 		binanceAccountToCreate.setMailValidationKey(validationMailKey);
 		binanceAccountToCreate.setMailValidationKeyInstant(Instant.now());
@@ -83,8 +74,6 @@ public class BinanceAccountService {
 	@Transactional
 	public BinanceAccount validateBinanceAccount(String keyToCheck) throws Exception {
 		Optional<BinanceAccount> binanceAccount = binanceAccountRepository.findByMailValidationKey(keyToCheck);
-		// Instant mailValidationKeyInstant =
-		// binanceAccount.get().getMailValidationKeyInstant();
 
 		if (binanceAccount.isPresent() && Duration
 				.between(binanceAccount.get().getMailValidationKeyInstant(), Instant.now()).getSeconds() <= 3600) {
@@ -97,8 +86,6 @@ public class BinanceAccountService {
 		} else {
 			throw new ArithmeticException("Votre code de vérification a expiré !");
 		}
-		// redondance??
-		// binanceAccountToCreate.setEmail(binanceAccountToCreate.getEmail());
 	}
 
 	@Transactional
@@ -182,7 +169,6 @@ public class BinanceAccountService {
 			Wallet wallet = client.createWallet();
 			LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
 			parameters.put("needBtcValuation", Boolean.TRUE);
-			System.out.println(wallet.getUserAsset(parameters));
 			return wallet.getUserAsset(parameters);
 		}
 		throw new EntityNotFoundException("Token non reconnue !");
@@ -201,8 +187,6 @@ public class BinanceAccountService {
 
 	@Transactional
 	public String changePassword(ChangePassword passwords, String token) {
-		System.out.println(passwords);
-		// System.out.println(passwords);
 		String cause = "";
 		String password = passwords.getPassword();
 		String newPassword = passwords.getNewPassword();
@@ -227,14 +211,12 @@ public class BinanceAccountService {
 
 	@Transactional
 	public BinanceAccount changeEmail(BinanceAccount newBinanceAccount) throws Exception {
-		// SpotClient client = new SpotClientImpl(newBinanceAccount.getBinanceApiKey(),
-		// newBinanceAccount.getBinanceApiSecret());
 		// Account reellement en base car requete sur l'id
 		BinanceAccount binanceAccountFound = binanceAccountRepository.findById(newBinanceAccount.getId()).get();
 		// on checke si le nouvel email est assiocie a un BinanceAcount en base
 		BinanceAccount binanceAccountTested = binanceAccountRepository.findByEmail(newBinanceAccount.getEmail());
-		System.out.println(newBinanceAccount.getEmail());
 
+		// prise en compte des differents cas de figure possibles
 		if (binanceAccountTested != null && binanceAccountTested.getValidatedMail() == true
 				&& binanceAccountTested.getMailValidationKey().isEmpty()) {
 			throw new EntityExistsException("Un compte associé à cet email existe déjà !");
@@ -274,10 +256,6 @@ public class BinanceAccountService {
 
 	public Boolean checkHeader(String token) {
 		BinanceAccount binanceAccount = binanceAccountRepository.findByToken(token);
-		// if(binanceAccount != null){
-		// return true;
-		// }
-		// return false;
 		return binanceAccount != null;
 	}
 
