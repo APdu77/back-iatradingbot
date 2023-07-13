@@ -35,7 +35,6 @@ import jakarta.transaction.Transactional;
  * @author oandrade
  */
 @Service
-//rdu : implementation de UserDetailsService
 public class BinanceAccountService {
 	@Autowired
 	BinanceAccountRepository binanceAccountRepository;
@@ -44,8 +43,6 @@ public class BinanceAccountService {
 	@Autowired
 	MessageDigest messageDigest;
 
-	// delai de validite dea cles (en secondes)
-	int ValidationMailKeyDuration = 3600;
 
 	@Transactional
 	public BinanceAccount createBinanceAccount(BinanceAccount binanceAccountToCreate) {
